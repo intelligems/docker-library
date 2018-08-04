@@ -1,8 +1,8 @@
 # Stolos Captain
 
-A [stolos.io](stolos.io) client tool, packaged with **docker-ce**, **unison** & **docker-compose**
+A [stolos.io](http://stolos.io/) client tool, packaged with **docker-ce**, **unison** & **docker-compose**
 
-For **stolos** documentation visit [docs.stolos.io](docs.stolos.io)
+For **stolos** documentation visit [docs.stolos.io](http://docs.stolos.io/)
 
 ## Use cases
 
@@ -45,7 +45,7 @@ docker run --rm \
     stolos sync
 ```
 
-- `STOLOS_URL`: Your organization url provided by [stolos.io](stolos.io)
-- `STOLOS_USERNAME`: Your [stolos.io](stolos.io) username
-- `STOLOS_PASSWORD`: Your [stolos.io](stolos.io) password
+- `STOLOS_URL`: Your organization url provided by [stolos.io](http://stolos.io/)
+- `STOLOS_USERNAME`: Your [stolos.io](http://stolos.io/) username
+- `STOLOS_PASSWORD`: Your [stolos.io](http://stolos.io/) password
 - `STOLOS_PROJECT_UUID` Individual Project uuid aqcuired by running `stolos projects list`. You can create a new project inside a project directory with `stolos projects create .`
