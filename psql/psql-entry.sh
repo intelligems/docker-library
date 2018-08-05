@@ -1,11 +1,14 @@
 #!/bin/bash
 
-if [ ! -z "$POSTGRES_USER" ] && [ ! -z "$POSTGRES_PASSWORD" ]
-then
-    echo "postgres:5432:postgres:$POSTGRES_USER:$POSTGRES_PASSWORD" > "$HOME"/.pgpass
-else
-    echo "postgres:5432:postgres:postgres:postgres" > "$HOME"/.pgpass
-fi
+POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+POSTGRES_DB=${POSTGRES_DB:-postgres}
+POSTGRES_USER=${POSTGRES_USER:-postgres}
+POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+POSTGRES_PORT=${POSTGRES_PORT:-5432}
+
+
+echo "$POSTGRES_HOST:$POSTGRES_PORT:$POSTGRES_DB:$POSTGRES_USER:$POSTGRES_PASSWORD" > "$HOME"/.pgpass
+
 
 chmod 0600 "$HOME"/.pgpass
 
