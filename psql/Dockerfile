@@ -4,7 +4,7 @@ ENV PACKAGES "postgresql-client bash"
 
 RUN apk add --update --no-cache $PACKAGES
 
-COPY psql-entry.sh .
-RUN chmod a+x psql-entry.sh
+COPY psql-entry.sh /root
+RUN chmod a+x /root/psql-entry.sh
 
-ENTRYPOINT [ "psql-entry.sh" ]
+ENTRYPOINT [ "/root/psql-entry.sh" ]
