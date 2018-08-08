@@ -1,3 +1,5 @@
 FROM sahsu/docker-ecs-cli
 
-RUN apk add --no-cache --update m4
+RUN apk add --no-cache --update m4 bash
+
+CMD ["bash"]
