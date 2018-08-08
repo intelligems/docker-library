@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   ecs-cli:
-    image: intelligems/ecs-cli:0.2
+    image: intelligems/ecs-cli:0.3
     environment:
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
