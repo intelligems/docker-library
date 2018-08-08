@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  ecs-cli:
+    image: intelligems/ecs-cli:0.2
+    environment:
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      CLUSTER_NAME: ${CLUSTER_NAME}
+      CLUSTER_REGION: ${CLUSTER_REGION}
+      CONFIG_NAME: ${CONFIG_NAME}
+      DEFAULT_LAUNCH_TYPE: ${DEFAULT_LAUNCH_TYPE}
+    command: ecs-cli configure --cluster "$CLUSTER_NAME" --region "$CLUSTER_REGION" --default-launch-type "$DEFAULT_LAUNCH_TYPE" --config-name "$CONFIG_NAME"
