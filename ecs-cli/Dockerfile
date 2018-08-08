@@ -1,6 +1,8 @@
 FROM sahsu/docker-ecs-cli
 
+COPY entrypoint.sh /
 RUN apk add --no-cache --update m4 bash && \
-    ln -s /ecs-cli /bin/ecs-cli
+    chmod a+x entrypoint.sh
 
-ENTRYPOINT ["/bin/bash"]
+
+ENTRYPOINT ["entrypoint.sh"]
