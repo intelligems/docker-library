@@ -37,7 +37,12 @@ PLUGIN_BUILD_TARGET=${PLUGIN_BUILD_TARGET:-web}
 stolos login --stolos-url="$PLUGIN_STOLOS_URL" --username "$PLUGIN_USERNAME" --password "$PLUGIN_PASSWORD"
 stolos projects connect "$PLUGIN_PROJECT_UUID"
 
-stolos compose --file "$PLUGIN_FILE" build "$PLUGIN_BUILD_TARGET"
+if [ -z "$PLUGIN_BUILD_TARGET" ]; then
+    stolos compose --file "$PLUGIN_FILE" build "$PLUGIN_BUILD_TARGET"
+fi
+
+stolos compose --file "$PLUGIN_FILE" up -d
+
 
 exec "$@"
 
