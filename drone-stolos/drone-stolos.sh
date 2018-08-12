@@ -55,7 +55,7 @@ if [ ! -z "$PLUGIN_CUSTOM_COMMANDS" ]; then
 
     for CUSTOM_CMD in "${CUSTOM_COMMANDS[@]}"
     do
-        echo "$CUSTOM_CMD"
+        eval "$CUSTOM_CMD"
     done
 fi
 
