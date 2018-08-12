@@ -17,3 +17,5 @@ RUN chmod a+x /bin/drone-stolos.sh
 
 ENTRYPOINT [ "/bin/drone-stolos.sh" ]
 
+CMD [ "stolos", "compose", "--file", "$PLUGIN_FILE", "up", "-d" ]
+

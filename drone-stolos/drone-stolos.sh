@@ -1,12 +1,12 @@
 #!/bin/sh
 
 # Default secrets
-PLUGIN_STOLOS_URL=${PLUGIN_STOLOS_URL:=$STOLOS_URL}
-PLUGIN_USERNAME=${PLUGIN_USERNAME:=$USERNAME}
-PLUGIN_PASSWORD=${PLUGIN_PASSWORD:=$PASSWORD}
-PLUGIN_PROJECT_UUID=${PLUGIN_PROJECT_UUID:=$PROJECT_UUID}
+PLUGIN_URL=${PLUGIN_URL:=$STOLOS_URL}
+PLUGIN_USERNAME=${PLUGIN_USERNAME:=$STOLOS_USERNAME}
+PLUGIN_PASSWORD=${PLUGIN_PASSWORD:=$STOLOS_PASSWORD}
+PLUGIN_PROJECT_UUID=${PLUGIN_PROJECT_UUID:=$STOLOS_PROJECT_UUID}
 
-if [ -z "$PLUGIN_STOLOS_URL" ]
+if [ -z "$PLUGIN_URL" ]
 then
     echo "You have not set stolos_url value or secret"
     exit 1
@@ -33,14 +33,14 @@ fi
 # Default file & service
 PLUGIN_FILE=${PLUGIN_FILE:-.stolos.yml}
 
-stolos login --stolos-url="$PLUGIN_STOLOS_URL" --username "$PLUGIN_USERNAME" --password "$PLUGIN_PASSWORD"
+stolos login --stolos-url="$PLUGIN_URL" --username "$PLUGIN_USERNAME" --password "$PLUGIN_PASSWORD"
 stolos projects connect "$PLUGIN_PROJECT_UUID"
 
 if [ ! -z "$PLUGIN_BUILD_TARGET" ]; then
     stolos compose --file "$PLUGIN_FILE" build "$PLUGIN_BUILD_TARGET"
 fi
 
-stolos compose --file "$PLUGIN_FILE" up -d
+# stolos compose --file "$PLUGIN_FILE" up -d
 
 
 exec "$@"
