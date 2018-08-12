@@ -1,25 +1,25 @@
 #!/bin/sh
 
 
-if [ -z "$PLUGIN_STOLOS_URL" ] || [ -z "$STOLOS_URL" ]
+if [ -z "$PLUGIN_STOLOS_URL" -o -z "$STOLOS_URL" ]
 then
     echo "You have not set stolos_url value or secret"
     exit 1
 fi
 
-if [ -z "$PLUGIN_USERNAME" ] || [ -z "$USERNAME" ]
+if [ -z "$PLUGIN_USERNAME" -o -z "$USERNAME" ]
 then
     echo "You have not set username value or secret"
     exit 1
 fi
 
-if [ -z "$PLUGIN_PASSWORD" ] || [ -z "$PASSWORD" ]
+if [ -z "$PLUGIN_PASSWORD" -o -z "$PASSWORD" ]
 then
     echo "You have not set password value or secret"
     exit 1
 fi
 
-if [ -z "$PLUGIN_PROJECT_UUID" ] || [ -z "$PROJECT_UUID" ]
+if [ -z "$PLUGIN_PROJECT_UUID" -o -z "$PROJECT_UUID" ]
 then
     echo "You have not set project_uuid value or secret"
     exit 1
