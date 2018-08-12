@@ -44,23 +44,7 @@ if [ ! -z "$PLUGIN_BUILD_TARGETS" ]; then
 
     for TARGET in "${BUILD_TARGETS[@]}"
     do
-        echo "Building $TARGET ..."
         stolos compose --file "$PLUGIN_FILE" build "$TARGET"
-    done
-
-fi
-
-# User specifies custom stolos compose commands
-if [ ! -z "$PLUGIN_CUSTOM_COMMANDS" ]; then
-
-    QUOTE="'"
-
-    # Parse drone array, sanitize commands
-    IFS=',' read -r -a CUSTOM_COMMANDS <<< "$QUOTE$PLUGIN_CUSTOM_COMMANDS$QUOTE"
-
-    for COMMAND in "${CUSTOM_COMMANDS[@]}"
-    do
-        stolos compose --file "$PLUGIN_FILE" "$COMMAND"
     done
 
 fi
