@@ -40,10 +40,7 @@ if [ ! -z "$PLUGIN_BUILD_TARGET" ]; then
     stolos compose --file "$PLUGIN_FILE" build "$PLUGIN_BUILD_TARGET"
 fi
 
-# stolos compose --file "$PLUGIN_FILE" up -d
-
-
-exec "$@"
+stolos compose --file "$PLUGIN_FILE" up -d
 
 
 
