@@ -49,6 +49,16 @@ if [ ! -z "$PLUGIN_BUILD_TARGETS" ]; then
 
 fi
 
+if [ ! -z "$PLUGIN_CUSTOM_COMMANDS" ]; then
+     # Parse drone array
+    IFS=',' read -r -a CUSTOM_COMMANDS <<< "$PLUGIN_CUSTOM_COMMANDS"
+
+    for CUSTOM_CMD in "${CUSTOM_COMMANDS[@]}"
+    do
+        echo "$CUSTOM_CMD"
+    done
+fi
+
 stolos compose --file "$PLUGIN_FILE" up -d
 
 
