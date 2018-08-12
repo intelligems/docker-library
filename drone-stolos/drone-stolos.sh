@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Default secrets
 PLUGIN_URL=${PLUGIN_URL:=$STOLOS_URL}
@@ -36,8 +36,31 @@ PLUGIN_FILE=${PLUGIN_FILE:-.stolos.yml}
 stolos login --stolos-url="$PLUGIN_URL" --username "$PLUGIN_USERNAME" --password "$PLUGIN_PASSWORD"
 stolos projects connect "$PLUGIN_PROJECT_UUID"
 
-if [ ! -z "$PLUGIN_BUILD_TARGET" ]; then
-    stolos compose --file "$PLUGIN_FILE" build "$PLUGIN_BUILD_TARGET"
+# User specifies custom build targets
+if [ ! -z "$PLUGIN_BUILD_TARGETS" ]; then
+
+    # Parse drone array
+    IFS=',' read -r -a BUILD_TARGETS <<< "$PLUGIN_BUILD_TARGETS"
+
+    for TARGET in "${BUILD_TARGETS[@]}"
+    do
+        echo "Building $TARGET ..."
+        stolos compose --file "$PLUGIN_FILE" build "$TARGET"
+    done
+
+fi
+
+# User specifies custom stolos compose commands
+if [ ! -z "$PLUGIN_CUSTOM_COMMANDS" ]; then
+
+    # Parse drone array
+    IFS=',' read -r -a CUSTOM_COMMANDS <<< "$PLUGIN_CUSTOM_COMMANDS"
+
+    for COMMAND in "${CUSTOM_COMMANDS[@]}"
+    do
+        stolos compose --file "$PLUGIN_FILE" "$COMMAND"
+    done
+
 fi
 
 stolos compose --file "$PLUGIN_FILE" up -d
