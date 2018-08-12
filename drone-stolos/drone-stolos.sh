@@ -53,8 +53,10 @@ fi
 # User specifies custom stolos compose commands
 if [ ! -z "$PLUGIN_CUSTOM_COMMANDS" ]; then
 
-    # Parse drone array
-    IFS=',' read -r -a CUSTOM_COMMANDS <<< "$PLUGIN_CUSTOM_COMMANDS"
+    QUOTE="'"
+
+    # Parse drone array, sanitize commands
+    IFS=',' read -r -a CUSTOM_COMMANDS <<< "$QUOTE$PLUGIN_CUSTOM_COMMANDS$QUOTE"
 
     for COMMAND in "${CUSTOM_COMMANDS[@]}"
     do
