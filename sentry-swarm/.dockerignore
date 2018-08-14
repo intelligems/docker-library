@@ -1,0 +1,14 @@
+.git
+.gitignore
+.dockerignore
+Makefile
+README.md
+*.pyc
+*.tar
+docker-compose.yml
+data/
+tasks-services/
+local.env
+task-execution-assume-role.json
+drone-secrets.sh
+swarm-secrets.sh
