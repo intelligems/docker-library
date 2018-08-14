@@ -60,4 +60,4 @@ filestore.backend: 's3'
 filestore.options:
   access_key: AKIXXXXXX
   secret_key: XXXXXXX
-  bucket_name: 'BKKK'
+  bucket_name: BKKK

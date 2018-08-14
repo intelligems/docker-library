@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # set -e
 
@@ -18,25 +18,28 @@ function set_config_target() {
     sed -ri "s/^(\s*)($1\s*:\s*$2\s*$)/\1$1: $escaped/" $4
 }
 
-if [[ "$SWARM_MODE" == "1" ]]; then
-    SENTRY_SECRET_KEY=$(cat /run/secrets/sentry_secret_key)
-    SENTRY_DB_NAME=$(cat /run/secrets/sentry_db_name)
-    SENTRY_DB_USER=$(cat /run/secrets/sentry_db_user)
-    SENTRY_DB_PASSWORD=$(cat /run/secrets/sentry_db_password)
-    SENTRY_SUPERUSER=$(cat /run/secrets/sentry_superuser)
-    SENTRY_SUPERPASSWORD=$(cat /run/secrets/sentry_superpassword)
-    AWS_ACCESS_KEY_ID=$(cat /run/secrets/aws_access_key_id)
-    AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/aws_secret_access_key)
-    S3_BUCKET_NAME=$(cat /run/secrets/s3_bucket_name)
+# if [[ "$SWARM_MODE" == "1" ]]; then
+#     export SENTRY_SECRET_KEY=$(cat /run/secrets/sentry_secret_key)
+#     export SENTRY_DB_NAME=$(cat /run/secrets/sentry_db_name)
+#     export SENTRY_DB_USER=$(cat /run/secrets/sentry_db_user)
+#     export SENTRY_DB_PASSWORD=$(cat /run/secrets/sentry_db_password)
+#     export SENTRY_SUPERUSER=$(cat /run/secrets/sentry_superuser)
+#     export SENTRY_SUPERPASSWORD=$(cat /run/secrets/sentry_superpassword)
+#     AWS_ACCESS_KEY_ID=$(cat /run/secrets/aws_access_key_id)
+#     AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/aws_secret_access_key)
+#     S3_BUCKET_NAME=$(cat /run/secrets/s3_bucket_name)
 
-    export SENTRY_SECRET_KEY
-    export SENTRY_DB_NAME
-    export SENTRY_DB_USER
-    export SENTRY_DB_PASSWORD
-    export SENTRY_SUPERUSER
-    export SENTRY_SUPERPASSWORD
-    export S3_BUCKET_NAME
-fi
+# fi
+
+export SENTRY_SECRET_KEY=$(cat /run/secrets/sentry_secret_key)
+export SENTRY_DB_NAME=$(cat /run/secrets/sentry_db_name)
+export SENTRY_DB_USER=$(cat /run/secrets/sentry_db_user)
+export SENTRY_DB_PASSWORD=$(cat /run/secrets/sentry_db_password)
+export SENTRY_SUPERUSER=$(cat /run/secrets/sentry_superuser)
+export SENTRY_SUPERPASSWORD=$(cat /run/secrets/sentry_superpassword)
+AWS_ACCESS_KEY_ID=$(cat /run/secrets/aws_access_key_id)
+AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/aws_secret_access_key)
+S3_BUCKET_NAME=$(cat /run/secrets/s3_bucket_name)
 
 if [[ "$FIRST_RUN" == "1" ]]; then
     sentry upgrade --noinput && \
@@ -59,7 +62,7 @@ fi
 
 
 if [ ! -z "$S3_BUCKET_NAME" ]; then
-        set_config_target "bucket_name" "BKKK" "$S3_BUCKET_NAME" $config_file
+    set_config_target "bucket_name" "BKKK" "$S3_BUCKET_NAME" $config_file
 fi
 
 exec "$@"
