@@ -41,7 +41,7 @@ from get_docker_secret import get_docker_secret
 
 CONF_ROOT = os.path.dirname(__file__)
 
-SECRET_DIR = os.path.join(root, 'run', 'secrets')
+SECRET_DIR = os.path.abspath(os.path.join(os.sep, 'run', 'secrets'))
 
 
 postgres = env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
