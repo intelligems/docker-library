@@ -3,6 +3,7 @@
 # set -e
 
 config_file=/etc/sentry/config.yml
+secrets_folder=/run/secrets
 
 function set_config_target() {
     #escape invalid characters
@@ -18,38 +19,34 @@ function set_config_target() {
     sed -ri "s/^(\s*)($1\s*:\s*$2\s*$)/\1$1: $escaped/" $4
 }
 
-# if [[ "$SWARM_MODE" == "1" ]]; then
-#     export SENTRY_SECRET_KEY=$(cat /run/secrets/sentry_secret_key)
-#     export SENTRY_DB_NAME=$(cat /run/secrets/sentry_db_name)
-#     export SENTRY_DB_USER=$(cat /run/secrets/sentry_db_user)
-#     export SENTRY_DB_PASSWORD=$(cat /run/secrets/sentry_db_password)
-#     export SENTRY_SUPERUSER=$(cat /run/secrets/sentry_superuser)
-#     export SENTRY_SUPERPASSWORD=$(cat /run/secrets/sentry_superpassword)
-#     AWS_ACCESS_KEY_ID=$(cat /run/secrets/aws_access_key_id)
-#     AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/aws_secret_access_key)
-#     S3_BUCKET_NAME=$(cat /run/secrets/s3_bucket_name)
 
-# fi
+# Read secrets from swarm
 
-export SENTRY_SECRET_KEY=$(cat /run/secrets/sentry_secret_key)
-export SENTRY_DB_NAME=$(cat /run/secrets/sentry_db_name)
-export SENTRY_DB_USER=$(cat /run/secrets/sentry_db_user)
-export SENTRY_DB_PASSWORD=$(cat /run/secrets/sentry_db_password)
-export SENTRY_SUPERUSER=$(cat /run/secrets/sentry_superuser)
-export SENTRY_SUPERPASSWORD=$(cat /run/secrets/sentry_superpassword)
-AWS_ACCESS_KEY_ID=$(cat /run/secrets/aws_access_key_id)
-AWS_SECRET_ACCESS_KEY=$(cat /run/secrets/aws_secret_access_key)
-S3_BUCKET_NAME=$(cat /run/secrets/s3_bucket_name)
-
-if [[ "$FIRST_RUN" == "1" ]]; then
-    sentry upgrade --noinput && \
-    sentry createuser \
-        --email "$SENTRY_SUPERUSER" \
-        --password "$SENTRY_SUPERPASSWORD" \
-        --superuser \
-        --no-input
+if [ -e $secrets_folder/aws_access_key_id ]; then
+    AWS_ACCESS_KEY_ID=$(cat $secrets_folder/aws_access_key_id)
 fi
 
+
+if [ -e $secrets_folder/aws_secret_access_key ]; then
+    AWS_SECRET_ACCESS_KEY=$(cat $secrets_folder/aws_secret_access_key)
+fi
+
+
+if [ -e $secrets_folder/s3_bucket_name ]; then
+    S3_BUCKET_NAME=$(cat $secrets_folder/s3_bucket_name)
+fi
+
+
+if [ -e $secrets_folder/sentry_superuser ]; then
+    SENTRY_SUPERUSER=$(cat $secrets_folder/sentry_superuser)
+fi
+
+
+if [ -e $secrets_folder/sentry_superpassword ]; then
+    SENTRY_SUPERPASSWORD=$(cat $secrets_folder/sentry_superpassword)
+fi
+
+# Make replacements
 
 if [ ! -z "$AWS_ACCESS_KEY_ID" ]; then
     set_config_target "access_key" "AKIXXXXXX" "$AWS_ACCESS_KEY_ID" $config_file
@@ -64,5 +61,17 @@ fi
 if [ ! -z "$S3_BUCKET_NAME" ]; then
     set_config_target "bucket_name" "BKKK" "$S3_BUCKET_NAME" $config_file
 fi
+
+# Run migrattions and create sentry superuser
+
+if [[ "$FIRST_RUN" == "1" ]]; then
+    sentry upgrade --noinput && \
+    sentry createuser \
+        --email "$SENTRY_SUPERUSER" \
+        --password "$SENTRY_SUPERPASSWORD" \
+        --superuser \
+        --no-input
+fi
+
 
 exec "$@"
