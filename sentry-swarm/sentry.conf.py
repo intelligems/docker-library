@@ -44,7 +44,7 @@ CONF_ROOT = os.path.dirname(__file__)
 SECRET_DIR = os.path.abspath(os.path.join(os.sep, 'run', 'secrets'))
 
 
-postgres = env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
+postgres = get_docker_secret('sentry_postgres_host', secrets_dir=SECRET_DIR) or env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
     DATABASES = {
         'default': {
@@ -69,8 +69,9 @@ if postgres:
             ),
             'HOST': postgres,
             'PORT': (
-                env('SENTRY_POSTGRES_PORT')
-                or ''
+                get_docker_secret('sentry_postgres_port', secrets_dir=SECRET_DIR)
+                or env('SENTRY_POSTGRES_PORT')
+                or '5432'
             ),
             'OPTIONS': {
                 'autocommit': True,
@@ -100,7 +101,7 @@ SENTRY_SINGLE_ORGANIZATION = env('SENTRY_SINGLE_ORGANIZATION', True)
 # Generic Redis configuration used as defaults for various things including:
 # Buffers, Quotas, TSDB
 
-redis = env('SENTRY_REDIS_HOST') or (env('REDIS_PORT_6379_TCP_ADDR') and 'redis')
+redis = get_docker_secret('sentry_redis_host', secrets_dir=SECRET_DIR) or env('SENTRY_REDIS_HOST') or (env('REDIS_PORT_6379_TCP_ADDR') and 'redis')
 if not redis:
     raise Exception('Error: REDIS_PORT_6379_TCP_ADDR (or SENTRY_REDIS_HOST) is undefined, did you forget to `--link` a redis container?')
 
@@ -130,10 +131,11 @@ SENTRY_OPTIONS.update({
 # Sentry currently utilizes two separate mechanisms. While CACHES is not a
 # requirement, it will optimize several high throughput patterns.
 
-memcached = env('SENTRY_MEMCACHED_HOST') or (env('MEMCACHED_PORT_11211_TCP_ADDR') and 'memcached')
+memcached = get_docker_secret('sentry_memcached_host', secrets_dir=SECRET_DIR) or env('SENTRY_MEMCACHED_HOST') or (env('MEMCACHED_PORT_11211_TCP_ADDR') and 'memcached')
 if memcached:
     memcached_port = (
-        env('SENTRY_MEMCACHED_PORT')
+        get_docker_secret('sentry_memcached_port', secrets_dir=SECRET_DIR)
+        or env('SENTRY_MEMCACHED_PORT')
         or '11211'
     )
     CACHES = {
@@ -155,20 +157,23 @@ SENTRY_CACHE = 'sentry.cache.redis.RedisCache'
 # information on configuring your queue broker and workers. Sentry relies
 # on a Python framework called Celery to manage queues.
 
-rabbitmq = env('SENTRY_RABBITMQ_HOST') or (env('RABBITMQ_PORT_5672_TCP_ADDR') and 'rabbitmq')
+rabbitmq = get_docker_secret('sentry_rabbitmq_host', secrets_dir=SECRET_DIR) or env('SENTRY_RABBITMQ_HOST') or (env('RABBITMQ_PORT_5672_TCP_ADDR') and 'rabbitmq')
 
 if rabbitmq:
     BROKER_URL = (
         'amqp://' + (
-            env('SENTRY_RABBITMQ_USERNAME')
+            get_docker_secret('sentry_rabbitmq_username', secrets_dir=SECRET_DIR)
+            or env('SENTRY_RABBITMQ_USERNAME')
             or env('RABBITMQ_ENV_RABBITMQ_DEFAULT_USER')
             or 'guest'
         ) + ':' + (
-            env('SENTRY_RABBITMQ_PASSWORD')
+            get_docker_secret('sentry_rabbitmq_password', secrets_dir=SECRET_DIR)
+            or env('SENTRY_RABBITMQ_PASSWORD')
             or env('RABBITMQ_ENV_RABBITMQ_DEFAULT_PASS')
             or 'guest'
         ) + '@' + rabbitmq + '/' + (
-            env('SENTRY_RABBITMQ_VHOST')
+            get_docker_secret('sentry_rabbitmq_vhost', secrets_dir=SECRET_DIR)
+            or env('SENTRY_RABBITMQ_VHOST')
             or env('RABBITMQ_ENV_RABBITMQ_DEFAULT_VHOST')
             or '/'
         )
@@ -259,23 +264,23 @@ SENTRY_WEB_OPTIONS = {
 ###############
 
 
-email = env('SENTRY_EMAIL_HOST') or (env('SMTP_PORT_25_TCP_ADDR') and 'smtp')
+email = get_docker_secret('sentry_email_host', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_HOST') or (env('SMTP_PORT_25_TCP_ADDR') and 'smtp')
 if email:
     SENTRY_OPTIONS['mail.backend'] = 'smtp'
     SENTRY_OPTIONS['mail.host'] = email
-    SENTRY_OPTIONS['mail.password'] = env('SENTRY_EMAIL_PASSWORD') or ''
-    SENTRY_OPTIONS['mail.username'] = env('SENTRY_EMAIL_USER') or ''
-    SENTRY_OPTIONS['mail.port'] = int(env('SENTRY_EMAIL_PORT') or 25)
-    SENTRY_OPTIONS['mail.use-tls'] = env('SENTRY_EMAIL_USE_TLS', False)
+    SENTRY_OPTIONS['mail.password'] = get_docker_secret('sentry_email_password', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_PASSWORD') or ''
+    SENTRY_OPTIONS['mail.username'] = get_docker_secret('sentry_email_user', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_USER') or ''
+    SENTRY_OPTIONS['mail.port'] = int(get_docker_secret('sentry_email_port', secrets_dir=SECRET_DIR)) or int(env('SENTRY_EMAIL_PORT') or 25)
+    SENTRY_OPTIONS['mail.use-tls'] = get_docker_secret('sentry_email_use_tls', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_USE_TLS', False)
 else:
     SENTRY_OPTIONS['mail.backend'] = 'dummy'
 
 # The email address to send on behalf of
-SENTRY_OPTIONS['mail.from'] = env('SENTRY_SERVER_EMAIL') or 'root@localhost'
+SENTRY_OPTIONS['mail.from'] = get_docker_secret('sentry_server_email', secrets_dir=SECRET_DIR) or env('SENTRY_SERVER_EMAIL') or 'root@localhost'
 
 # If you're using mailgun for inbound mail, set your API key and configure a
 # route to forward to /api/hooks/mailgun/inbound/
-SENTRY_OPTIONS['mail.mailgun-api-key'] = env('SENTRY_MAILGUN_API_KEY') or ''
+SENTRY_OPTIONS['mail.mailgun-api-key'] = get_docker_secret('sentry_mailgun_api_key', secrets_dir=SECRET_DIR) or env('SENTRY_MAILGUN_API_KEY') or ''
 
 # If you specify a MAILGUN_API_KEY, you definitely want EMAIL_REPLIES
 if SENTRY_OPTIONS['mail.mailgun-api-key']:
@@ -284,7 +289,7 @@ else:
     SENTRY_OPTIONS['mail.enable-replies'] = env('SENTRY_ENABLE_EMAIL_REPLIES', False)
 
 if SENTRY_OPTIONS['mail.enable-replies']:
-    SENTRY_OPTIONS['mail.reply-hostname'] = env('SENTRY_SMTP_HOSTNAME') or ''
+    SENTRY_OPTIONS['mail.reply-hostname'] = get_docker_secret('sentry_smtp_hostname', secrets_dir=SECRET_DIR) or env('SENTRY_SMTP_HOSTNAME') or ''
 
 # If this value ever becomes compromised, it's important to regenerate your
 # SENTRY_SECRET_KEY. Changing this value will result in all current sessions
@@ -303,11 +308,11 @@ if 'SENTRY_RUNNING_UWSGI' not in os.environ and len(secret_key) < 32:
 
 SENTRY_OPTIONS['system.secret-key'] = secret_key
 
-if 'GITHUB_APP_ID' in os.environ:
+if 'GITHUB_APP_ID' in os.environ or os.path.exists(os.path.join(SECRET_DIR, 'github_app_id')):
     GITHUB_EXTENDED_PERMISSIONS = ['repo']
-    GITHUB_APP_ID = env('GITHUB_APP_ID')
-    GITHUB_API_SECRET = env('GITHUB_API_SECRET')
+    GITHUB_APP_ID = get_docker_secret('github_app_id', secrets_dir=SECRET_DIR) or env('GITHUB_APP_ID')
+    GITHUB_API_SECRET = get_docker_secret('github_api_secret', secrets_dir=SECRET_DIR) or env('GITHUB_API_SECRET')
 
-if 'BITBUCKET_CONSUMER_KEY' in os.environ:
-    BITBUCKET_CONSUMER_KEY = env('BITBUCKET_CONSUMER_KEY')
-    BITBUCKET_CONSUMER_SECRET = env('BITBUCKET_CONSUMER_SECRET')
+if 'BITBUCKET_CONSUMER_KEY' in os.environ or os.path.exists(os.path.join(SECRET_DIR, 'bitbucket_consumer_key')):
+    BITBUCKET_CONSUMER_KEY = get_docker_secret('bitbucket_consumer_key', secrets_dir=SECRET_DIR) or env('BITBUCKET_CONSUMER_KEY')
+    BITBUCKET_CONSUMER_SECRET = get_docker_secret('bitbucket_consumer_secret', secrets_dir=SECRET_DIR) or env('BITBUCKET_CONSUMER_SECRET')
