@@ -105,8 +105,8 @@ redis = get_docker_secret('sentry_redis_host', secrets_dir=SECRET_DIR) or env('S
 if not redis:
     raise Exception('Error: REDIS_PORT_6379_TCP_ADDR (or SENTRY_REDIS_HOST) is undefined, did you forget to `--link` a redis container?')
 
-redis_password = env('SENTRY_REDIS_PASSWORD') or ''
-redis_port = env('SENTRY_REDIS_PORT') or '6379'
+redis_password = get_docker_secret('sentry_redis_password', secrets_dir=SECRET_DIR) or env('SENTRY_REDIS_PASSWORD') or ''
+redis_port = get_docker_secret('sentry_redis_port', secrets_dir=SECRET_DIR) or env('SENTRY_REDIS_PORT') or '6379'
 redis_db = env('SENTRY_REDIS_DB') or '0'
 
 SENTRY_OPTIONS.update({
