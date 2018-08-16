@@ -49,10 +49,8 @@ for secret in glob(ALL_SECRETS):
     secret_key=secret.split('/')[-1].upper()
     with open(secret) as secret_file:
         secret_value = secret_file.read().rstrip('\n')
-        os.putenv(secret_key, secret_value)
-        print secret_key + ':' + secret_value
+        os.environ[secret_key] = secret_value
 
-print os.environ
 
 postgres = env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
