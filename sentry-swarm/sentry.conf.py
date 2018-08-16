@@ -270,7 +270,7 @@ if email:
     SENTRY_OPTIONS['mail.host'] = email
     SENTRY_OPTIONS['mail.password'] = get_docker_secret('sentry_email_password', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_PASSWORD') or ''
     SENTRY_OPTIONS['mail.username'] = get_docker_secret('sentry_email_user', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_USER') or ''
-    SENTRY_OPTIONS['mail.port'] = int(get_docker_secret('sentry_email_port', secrets_dir=SECRET_DIR)) or int(env('SENTRY_EMAIL_PORT') or 25)
+    SENTRY_OPTIONS['mail.port'] = get_docker_secret('sentry_email_port', cast_to=int secrets_dir=SECRET_DIR) or int(env('SENTRY_EMAIL_PORT') or 25)
     SENTRY_OPTIONS['mail.use-tls'] = get_docker_secret('sentry_email_use_tls', secrets_dir=SECRET_DIR) or env('SENTRY_EMAIL_USE_TLS', False)
 else:
     SENTRY_OPTIONS['mail.backend'] = 'dummy'
