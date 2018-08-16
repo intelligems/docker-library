@@ -65,14 +65,14 @@ fi
 
 # Run migrattions and create sentry superuser
 
-if [[ "$FIRST_RUN" == "1" ]]; then
-    sentry upgrade --noinput && \
-    sentry createuser \
-        --email "$SENTRY_SUPERUSER" \
-        --password "$SENTRY_SUPERPASSWORD" \
-        --superuser \
-        --no-input
-fi
+# if [[ "$FIRST_RUN" == "1" ]]; then
+#     sentry upgrade --noinput && \
+#     sentry createuser \
+#         --email "$SENTRY_SUPERUSER" \
+#         --password "$SENTRY_SUPERPASSWORD" \
+#         --superuser \
+#         --no-input
+# fi
 
 
 exec "$@"
