@@ -1,2 +1,0 @@
-# Add plugins here
-get-docker-secret==1.0.0

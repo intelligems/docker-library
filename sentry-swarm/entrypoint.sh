@@ -1,9 +1,11 @@
-#!/bin/bash -e
+#!/bin/bash
 
-# set -e
+set -e
 
 config_file=/etc/sentry/config.yml
 secrets_folder=/run/secrets
+
+eval $(python /exporter.py)
 
 function set_config_target() {
     #escape invalid characters

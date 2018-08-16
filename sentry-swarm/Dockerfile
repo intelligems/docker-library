@@ -1,10 +1,7 @@
 FROM sentry:9.0-onbuild
 
-COPY requirements.txt /usr/src/requirements.txt
-RUN pip install -r requirements.txt
-
 COPY config.yml /etc/sentry/
-COPY sentry.conf.py /etc/sentry/
+COPY exporter.py /exporter.py
 
 COPY entrypoint.sh /custom_entrypoint.sh
 RUN chmod a+x /custom_entrypoint.sh
