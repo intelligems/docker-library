@@ -48,8 +48,9 @@ ALL_SECRETS = os.path.join(SECRETS_DIR, '*')
 for secret in ALL_SECRETS:
     secret_key=secret.split('/')[-1].upper()
     with open(secret) as secret_file:
-        secret_value=secret_file.read().rstrip('\n')
+        secret_value = secret_file.read().rstrip('\n')
         os.putenv(secret_key, secret_value)
+        print secret_key + ':' + secret_value
 
 postgres = env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
 if postgres:
