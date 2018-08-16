@@ -7,4 +7,5 @@ COPY entrypoint.sh /custom_entrypoint.sh
 RUN chmod a+x /custom_entrypoint.sh
 
 ENTRYPOINT ["/custom_entrypoint.sh"]
-CMD ["sentry", "run", "web"]
+# CMD ["sentry", "run", "web"]
+CMD ["tail", "-f", "/dev/null"]
