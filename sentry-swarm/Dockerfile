@@ -1,7 +1,7 @@
 FROM sentry:9.0-onbuild
 
 COPY config.yml /etc/sentry/
-COPY exporter.py /exporter.py
+COPY sentry.conf.py /etc/sentry/
 
 COPY entrypoint.sh /custom_entrypoint.sh
 RUN chmod a+x /custom_entrypoint.sh
