@@ -44,12 +44,15 @@ CONF_ROOT = os.path.dirname(__file__)
 SECRETS_DIR = os.path.abspath(os.path.join(os.path.sep, 'run', 'secrets'))
 ALL_SECRETS = os.path.join(SECRETS_DIR, '*')
 
-# Export variables from secrets
-for secret in glob(ALL_SECRETS):
-    secret_key=secret.split('/')[-1].upper()
-    with open(secret) as secret_file:
-        secret_value = secret_file.read().rstrip('\n')
-        os.environ[secret_key] = secret_value
+SWARM_MODE = env('SWARM_MODE', True)
+
+if SWARM_MODE:
+    # Export variables from secrets
+    for secret in glob(ALL_SECRETS):
+        secret_key=secret.split('/')[-1].upper()
+        with open(secret) as secret_file:
+            secret_value = secret_file.read().rstrip('\n')
+            os.environ[secret_key] = secret_value
 
 
 postgres = env('SENTRY_POSTGRES_HOST') or (env('POSTGRES_PORT_5432_TCP_ADDR') and 'postgres')
