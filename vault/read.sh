@@ -32,7 +32,7 @@ echo "Password: "
 
 read -rs PASSWORD
 
-if [ "$USERNAME" == "$(cat $secrets_folder/vault_username)" ] && [ "$PASSWORD" == "$(cat $secrets_folder/vault_password)" ]
+if [ -f $secrets_folder/vault_username ] && [ -f $secrets_folder/vault_password ] && [ "$USERNAME" == "$(cat $secrets_folder/vault_username)" ] && [ "$PASSWORD" == "$(cat $secrets_folder/vault_password)" ]
 then
     read_secret
 else
