@@ -1,5 +1,5 @@
 #!/bin/bash
 
-ln -s /root/read.sh /bin/vault
+ln -s /bin/read.sh /bin/vault
 
 exec "$@"
