@@ -2,4 +2,5 @@
 
 ln -s /bin/read.sh /bin/vault
 
-exec "$@"
+# Keep container open
+tail -f /dev/null

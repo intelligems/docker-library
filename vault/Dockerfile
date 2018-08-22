@@ -8,6 +8,4 @@ RUN chmod a+x /bin/read.sh && \
 
 ENTRYPOINT [ "/root/entrypoint.sh" ]
 
-# Keep container open
-CMD [ "tail -f /dev/null" ]
 
