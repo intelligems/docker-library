@@ -8,7 +8,13 @@ function read_secret() {
 
     if [ -f "$secrets_folder/$secret_name" ]
     then
+        echo ""
+        echo "##### Contents of $secret_name #####"
+        echo ""
         cat "$secrets_folder/$secret_name"
+        echo ""
+        echo "##### End of $secret_name #####"
+        echo ""
         exit 0
     else
         echo "File $secret_name does not exist."
