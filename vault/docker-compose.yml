@@ -1,0 +1,18 @@
+version: "3.4"
+
+secrets:
+  vault_username_v1:
+    external: true
+  vault_password_v1:
+    external: true
+
+services:
+  vault:
+    image: intelligems/vault-reader:latest
+    secrets:
+      - source: vault_username_v1
+        target: vault_username
+      - source: vault_password_v1
+        target: vault_password
+    deploy:
+      replicas: 1
