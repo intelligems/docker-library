@@ -3,10 +3,18 @@
 secrets_folder=/run/secrets
 
 function read_secret() {
-    echo "Please type the secret file you want to read: "
+    echo "Please type the secret file you want to read or (a) for all secrets: "
     read -r secret_name
-
-    if [ -f "$secrets_folder/$secret_name" ]
+    if [ "$secret_name" == "a" ]
+    then
+        echo ""
+        echo "##### Contents of secrets #####"
+        echo ""
+        cat "$secrets_folder/*"
+        echo ""
+        echo "##### End of secrets #####"
+        echo ""
+    elif [ -f "$secrets_folder/$secret_name" ]
     then
         echo ""
         echo "##### Contents of $secret_name #####"
