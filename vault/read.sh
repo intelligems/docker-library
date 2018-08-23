@@ -10,7 +10,11 @@ function read_secret() {
         echo ""
         echo "##### Contents of secrets #####"
         echo ""
-        cat "$secrets_folder/*"
+        keys=$(ls $secrets_folder)
+        for key in "${keys[@]}"
+        do
+            echo "$key: $(cat $secrets_folder/$key)"
+        done
         echo ""
         echo "##### End of secrets #####"
         echo ""
