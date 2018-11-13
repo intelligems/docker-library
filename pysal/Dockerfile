@@ -1,3 +1,3 @@
-FROM python:3.6.7-alpine3.8
+FROM jfloff/alpine-python:3.6-slim
 
 RUN pip install -U pysal
