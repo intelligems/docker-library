@@ -1,0 +1,30 @@
+# Sample compose file for a django app and postgis
+version: '3'
+
+services:
+
+  postgis:
+    image: kartoza/postgis:9.6-2.4
+    volumes:
+      - postgis_data:/var/lib/postgresql
+    environment:
+      ALLOW_IP_RANGE: 0.0.0.0/0
+      POSTGRES_PASS: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: postgis
+
+  web:
+    image: intelligems/geodjango:latest
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      DEBUG: "True"
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgis:5432/postgis
+      SENTRY_DSN: ${SENTRY_DSN}
+    ports:
+      - 8000:8000
+    depends_on:
+      - postgis
+
+volumes:
+  postgis_data: {}
