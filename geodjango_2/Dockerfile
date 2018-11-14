@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install GDAL dependencies
 RUN echo deb http://deb.debian.org/debian testing main contrib non-free >> /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y libgdal-dev --no-install-recommends && \
+    apt-get install -y libgdal-dev tk g++ --no-install-recommends && \
     pip install pipenv && \
     pip install gunicorn && \
     apt-get clean -y
