@@ -11,7 +11,8 @@ ENV PYTHONUNBUFFERED=1
 #     apt-get autoremove -y
 
 # Install GDAL dependencies
-RUN apt-get install -y libgdal-dev --no-install-recommends && \
+RUN apt-get update && \
+    apt-get install -y libgdal-dev --no-install-recommends && \
     pip install pipenv && \
     pip install gunicorn && \
     apt-get clean -y
