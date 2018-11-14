@@ -3,15 +3,9 @@ MAINTAINER Ioannis Dritsas <dritsas@intelligems.eu>
 
 ENV PYTHONUNBUFFERED=1
 
-# Add unstable repo to allow us to access latest GDAL builds
-# Existing binutils causes a dependency conflict, correct version will be installed when GDAL gets intalled
-# RUN echo deb http://deb.debian.org/debian testing main contrib non-free >> /etc/apt/sources.list && \
-#     apt-get update && \
-#     apt-get remove -y binutils && \
-#     apt-get autoremove -y
-
 # Install GDAL dependencies
-RUN apt-get update && \
+RUN echo deb http://deb.debian.org/debian testing main contrib non-free >> /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y libgdal-dev --no-install-recommends && \
     pip install pipenv && \
     pip install gunicorn && \
