@@ -3,6 +3,7 @@ MAINTAINER Ioannis Dritsas <dritsas@intelligems.eu>
 
 ENV PYTHONUNBUFFERED=1
 ENV DEBIAN_FRONTEND=noninteractive
+# ENV GDAL_SKIP=DODS
 
 # Install GDAL dependencies
 RUN echo deb http://deb.debian.org/debian testing main contrib non-free >> /etc/apt/sources.list && \
